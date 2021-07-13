@@ -2,11 +2,7 @@ package com.mvc.demo;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class SampleController {
@@ -38,6 +34,12 @@ public class SampleController {
     @GetMapping({"/get/{name}"})
     public Employee GetByName(@PathVariable String name) {
         return this.employeeDAO.GetByName(name);
+    }
+
+    @DeleteMapping("/{id}")
+    public void DeleteEmployee(@PathVariable int id){
+        Employee employee = Find(id);
+        employeeDAO.DeleteEmployee(employee);
     }
 }
 

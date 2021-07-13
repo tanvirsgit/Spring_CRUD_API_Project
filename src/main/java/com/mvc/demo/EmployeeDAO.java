@@ -3,11 +3,14 @@ package com.mvc.demo;
 import java.util.List;
 
 public interface EmployeeDAO {
-    void SaveEmployee(Employee var1);
+    void SaveEmployee(Employee employee);
 
-    Employee GetEmployee(int var1);
+    Employee GetEmployee(int id);
 
     List<Employee> GetAll();
 
-    Employee GetByName(String var1);
+    Employee GetByName(String name);
+
+    void DeleteEmployee(Employee employee);
+
 }

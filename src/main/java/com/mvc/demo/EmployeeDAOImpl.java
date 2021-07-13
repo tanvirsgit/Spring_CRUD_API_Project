@@ -44,5 +44,9 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         return employee;
     }
 
-
+    @Transactional
+    public void DeleteEmployee(Employee employee) {
+        Session session = sessionFactory.getCurrentSession();
+        session.delete(employee);
+    }
 }
