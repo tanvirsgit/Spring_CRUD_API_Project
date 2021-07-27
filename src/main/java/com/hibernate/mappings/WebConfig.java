@@ -31,15 +31,14 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/books/*/**").hasAnyAuthority("admin","user")
                 .antMatchers("/users/delete/*").hasAuthority("admin")
                 .antMatchers("/users/**").hasAnyAuthority("admin","user")
+                .antMatchers("/current*").hasAuthority("user")
                 .antMatchers("/books").permitAll()
                 .and().httpBasic().and().csrf().disable();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
         auth.userDetailsService(userDetailsService);
-
     }
 
     @Bean
