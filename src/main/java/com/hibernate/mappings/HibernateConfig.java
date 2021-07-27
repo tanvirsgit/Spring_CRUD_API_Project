@@ -1,24 +1,26 @@
-package com.mvc.demo;
+package com.hibernate.mappings;
 
-import java.util.Properties;
-import javax.sql.DataSource;
+import org.flywaydb.core.Flyway;
 import org.hibernate.dialect.MySQL55Dialect;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import javax.sql.DataSource;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
+
 @Configuration
-@ComponentScan({"com.mvc.demo"})
 @EnableTransactionManagement
+@ComponentScan("com.hibernate.mappings")
 @EnableWebMvc
-public class MVCConfig {
-    public MVCConfig() {
-    }
+public class HibernateConfig {
 
     @Bean
     public DataSource dataSource() {
@@ -26,14 +28,19 @@ public class MVCConfig {
         dataSource.setUrl("jdbc:mysql://localhost:3306/demo");
         dataSource.setUsername("root");
         dataSource.setPassword("Dipro@123456");
+
+        try {
+            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver()); // For tomcat9
+        }catch (SQLException s){}
         return dataSource;
     }
 
     @Bean
+    @DependsOn("flyway")
     public LocalSessionFactoryBean sessionFactoryBean() {
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
         sessionFactoryBean.setDataSource(this.dataSource());
-        sessionFactoryBean.setPackagesToScan(new String[]{"com.mvc.demo"});
+        sessionFactoryBean.setPackagesToScan(new String[]{"com.hibernate.mappings"});
         sessionFactoryBean.setHibernateProperties(this.properties());
         return sessionFactoryBean;
     }
@@ -52,5 +59,15 @@ public class MVCConfig {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
         transactionManager.setSessionFactory(this.sessionFactoryBean().getObject());
         return transactionManager;
+    }
+
+    @Bean
+    public Flyway flyway(){
+        Flyway flyway = Flyway.configure()
+                .dataSource(dataSource())
+                .baselineOnMigrate(true)
+                .load();
+        flyway.migrate();
+        return flyway;
     }
 }
