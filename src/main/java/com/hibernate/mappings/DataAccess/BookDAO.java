@@ -1,5 +1,8 @@
-package com.hibernate.mappings;
+package com.hibernate.mappings.DataAccess;
 
+import com.hibernate.mappings.Entity.Book;
+import com.hibernate.mappings.Entity.User;
+import com.hibernate.mappings.UserDetailServices.MyUserDetails;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -124,4 +127,5 @@ public class BookDAO {
            return book;
         });
     }
+
 }

@@ -1,5 +1,7 @@
-package com.hibernate.mappings;
+package com.hibernate.mappings.UserDetailServices;
 
+import com.hibernate.mappings.DataAccess.BookDAO;
+import com.hibernate.mappings.Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

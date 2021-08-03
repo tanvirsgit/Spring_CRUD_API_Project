@@ -1,11 +1,11 @@
-package com.hibernate.mappings;
+package com.hibernate.mappings.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.hibernate.mappings.Entity.Book;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,30 +17,37 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotBlank(message = "required")
     @Column
     private String name;
 
+    @NotBlank(message = "required")
+    @Size(min = 3, message = "Password length at least 3")
     @Column
     private String password;
 
+    @NotBlank(message = "required")
+    @Pattern(regexp = "user|admin", message = "enter valid type, only user and admin are accepted")
     @Column
     private String role;
 
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "rentedTo",cascade = {CascadeType.PERSIST,CascadeType.MERGE}) // default lazy loading
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "rentedTo", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    // default lazy loading
     private List<Book> rentedBooks = new ArrayList<>();
 
-    public User(){}
+    public User() {
+    }
 
-    public User(String name){
+    public User(String name) {
         this.name = name;
     }
 
-    public void rentBook(Book book){
+    public void rentBook(Book book) {
         book.setRentedTo(this);
         rentedBooks.add(book);
     }
 
-    public void returnBook(Book book){
+    public void returnBook(Book book) {
         rentedBooks.remove(book);
         book.setRentedTo(null);
     }

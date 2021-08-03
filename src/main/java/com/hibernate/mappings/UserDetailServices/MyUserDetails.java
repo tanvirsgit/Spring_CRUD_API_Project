@@ -1,11 +1,9 @@
-package com.hibernate.mappings;
+package com.hibernate.mappings.UserDetailServices;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
+import com.hibernate.mappings.Entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Collection;

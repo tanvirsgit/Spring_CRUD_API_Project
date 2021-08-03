@@ -1,12 +1,23 @@
-package com.hibernate.mappings;
+package com.hibernate.mappings.Controller;
+
+import com.hibernate.mappings.Entity.User;
+import com.hibernate.mappings.Entity.Book;
+import com.hibernate.mappings.DataAccess.BookDAO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -19,14 +30,11 @@ public class UserController {
     private PasswordEncoder encoder;
 
     @PostMapping("/addUser")
-    public ResponseEntity addUser(@RequestBody User user){
-        if(user!=null){
-            user.setPassword(encoder.encode(user.getPassword()));
-            bookDAO.insertUser(user);
-
-            return new ResponseEntity<User>(user, HttpStatus.CREATED);
-        }
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    public ResponseEntity addUser(@Valid @RequestBody User user){
+        System.out.println("Inside addUser");
+        user.setPassword(encoder.encode(user.getPassword()));
+        bookDAO.insertUser(user);
+        return new ResponseEntity("User added", HttpStatus.CREATED);
     }
 
     @GetMapping("/current")
@@ -64,4 +72,19 @@ public class UserController {
         }
         return new ResponseEntity("Deleted user successfully",HttpStatus.OK);
     }
+    
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String,String> handleError(MethodArgumentNotValidException ex){
+        System.out.println("Indside handleError");
+        Map<String,String> errors = new HashMap<>();
+        String field,msg;
+        for(FieldError error: ex.getBindingResult().getFieldErrors()){
+            field= error.getField();
+            msg=error.getDefaultMessage();
+            errors.put(field,msg);
+        }
+        return errors;
+    }
+    
 }

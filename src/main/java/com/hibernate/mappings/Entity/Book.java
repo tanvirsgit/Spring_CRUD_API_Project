@@ -1,9 +1,10 @@
-package com.hibernate.mappings;
+package com.hibernate.mappings.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Optional;
 
 @Entity
@@ -15,6 +16,8 @@ public class Book {
     private int id;
 
     @Column
+    @NotBlank(message = "required")
+    @Size(min = 2,message = "length atleast 2")
     private String name;
 
     @ManyToOne

@@ -1,4 +1,4 @@
-package com.hibernate.mappings;
+package com.hibernate.mappings.Configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

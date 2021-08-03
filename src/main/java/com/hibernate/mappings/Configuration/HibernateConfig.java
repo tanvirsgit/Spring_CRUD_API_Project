@@ -1,15 +1,19 @@
-package com.hibernate.mappings;
+package com.hibernate.mappings.Configuration;
 
+import com.hibernate.mappings.Interceptor.DemoInterceptor1;
+import com.hibernate.mappings.Interceptor.DemoInterceptor2;
+import com.hibernate.mappings.Interceptor.DemoInterceptor3;
 import org.flywaydb.core.Flyway;
 import org.hibernate.dialect.MySQL55Dialect;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
 import java.sql.DriverManager;
@@ -20,7 +24,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @ComponentScan("com.hibernate.mappings")
 @EnableWebMvc
-public class HibernateConfig {
+public class HibernateConfig implements WebMvcConfigurer {
 
     @Bean
     public DataSource dataSource() {
@@ -36,7 +40,7 @@ public class HibernateConfig {
     }
 
     @Bean
-    @DependsOn("flyway")
+    //@DependsOn("flyway")
     public LocalSessionFactoryBean sessionFactoryBean() {
         LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
         sessionFactoryBean.setDataSource(this.dataSource());
@@ -69,5 +73,13 @@ public class HibernateConfig {
                 .load();
         flyway.migrate();
         return flyway;
+    }
+
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new DemoInterceptor1());
+        registry.addInterceptor(new DemoInterceptor2());
+        registry.addInterceptor(new DemoInterceptor3());
     }
 }
