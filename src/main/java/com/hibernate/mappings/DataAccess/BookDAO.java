@@ -123,7 +123,6 @@ public class BookDAO {
             b.setName(book.getName());
             return b;
         }).orElseGet(()->{
-           book.setId(id);
            session.merge(book);
            return book;
         });

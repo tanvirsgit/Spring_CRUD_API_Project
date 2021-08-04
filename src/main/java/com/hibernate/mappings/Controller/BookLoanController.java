@@ -35,7 +35,6 @@ public class BookLoanController {
 
     @PutMapping("books/edit/{id}")
     public ResponseEntity EditOrAddBook(@Valid @PathVariable int id,@Valid @RequestBody Book book){
-        book.setName(book.getName());
         Book book1= bookDAO.AddOrUpdateBook(book,id);
         return new ResponseEntity("Updated Successfully",HttpStatus.OK);
     }
