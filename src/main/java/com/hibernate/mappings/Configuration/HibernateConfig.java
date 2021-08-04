@@ -76,10 +76,10 @@ public class HibernateConfig implements WebMvcConfigurer {
     }
 
 
-    @Override
+   /* @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new DemoInterceptor1());
         registry.addInterceptor(new DemoInterceptor2());
         registry.addInterceptor(new DemoInterceptor3());
-    }
+    }*/
 }
